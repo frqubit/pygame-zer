@@ -3,7 +3,7 @@ import pyzer
 
 pygame.init()
 screen = pygame.display.set_mode((1280, 720))
-zerdriver = pyzer.PygameDriver(sensitivity = 1)
+zerdriver = pyzer.PygameDriver(screen)
 
 pyzer.Circle(zerdriver, (100, 100), 25, fill="red")
 pyzer.Circle(zerdriver, (200, 250), 15, fill="green")

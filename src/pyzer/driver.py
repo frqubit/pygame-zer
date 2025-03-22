@@ -1,19 +1,19 @@
 from .shape import Shape
+from .camera import Camera
 import pygame
 
 class PygameDriver:
-    def __init__(self, sensitivity: float = 1):
+    def __init__(self, surface: pygame.Surface):
         self.shapes: list[Shape] = []
-        self.sensitivity = sensitivity
+        self.camera = Camera(surface, (0, 0), surface.get_size(), 1)
 
     def draw(self, surface: pygame.Surface):
         for shape in self.shapes:
-            shape.draw(surface)
+            shape.draw(self.camera)
 
     def _insert_shape(self, shape: Shape):
         self.shapes.append(shape)
 
     def handle_event(self, event: pygame.event.Event):
         if event.type == pygame.MOUSEMOTION and event.buttons[0]:
-            for shape in self.shapes:
-                shape.translate(event.rel[0] * self.sensitivity, event.rel[1] * self.sensitivity)
+            self.camera.translate(event.rel)

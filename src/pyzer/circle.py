@@ -1,4 +1,5 @@
 import pygame
+from .camera import Camera
 from .driver import PygameDriver
 from .shape import Shape
 
@@ -9,8 +10,9 @@ class Circle(Shape):
         self.fill = fill
         driver._insert_shape(self)
 
-    def draw(self, surface: pygame.Surface):
-        pygame.draw.circle(surface, self.fill, self.center, self.radius)
+    def draw(self, camera: Camera):
+        center = camera.point_to_camera(self.center)
+        pygame.draw.circle(camera.surface, self.fill, center, self.radius)
 
     def translate(self, x: int, y: int):
         self.center = (
