@@ -14,6 +14,11 @@ class PygameDriver:
     def _insert_shape(self, shape: Shape):
         self.shapes.append(shape)
 
-    def handle_event(self, event: pygame.event.Event):
+    def handle_event(self, event: pygame.event.Event) -> bool:
         if event.type == pygame.MOUSEMOTION and event.buttons[0]:
             self.camera.translate(event.rel)
+            return True
+        elif event.type == pygame.MOUSEWHEEL:
+            self.camera.zoom(event.y)
+            return True
+        return False

@@ -12,7 +12,8 @@ class Circle(Shape):
 
     def draw(self, camera: Camera):
         center = camera.point_to_camera(self.center)
-        pygame.draw.circle(camera.surface, self.fill, center, self.radius)
+        radius = camera.distance_to_camera(self.radius)
+        pygame.draw.circle(camera.surface, self.fill, center, radius)
 
     def translate(self, x: int, y: int):
         self.center = (
