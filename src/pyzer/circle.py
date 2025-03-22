@@ -11,3 +11,9 @@ class Circle(Shape):
 
     def draw(self, surface: pygame.Surface):
         pygame.draw.circle(surface, self.fill, self.center, self.radius)
+
+    def translate(self, x: int, y: int):
+        self.center = (
+            self.center[0] + x,
+            self.center[1] + y
+        )
