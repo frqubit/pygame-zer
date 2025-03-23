@@ -38,7 +38,7 @@ class Camera:
     def distance_to_camera(self, distance: float) -> float:
         return distance * self.camerazoom
 
-    def point_to_camera(self, pt: Vec2i) -> Vec2i:
+    def point_to_camera(self, pt: Vec2f) -> Vec2i:
         camerasize: Vec2f = (
             self.rendersize[0] / self.camerazoom,
             self.rendersize[1] / self.camerazoom
