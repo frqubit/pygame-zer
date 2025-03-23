@@ -7,6 +7,8 @@ class Camera:
         self.surface = surface
         self.rendersize = rendersize
         self.camerazoom = camerazoom
+        self.maxzoom = 50
+        self.minzoom = 0.02
 
     def translate(self, rel: Vec2i):
         self.topleft = (
@@ -20,20 +22,30 @@ class Camera:
             self.topleft[1] + ((self.rendersize[1] / self.camerazoom) / 2)
         )
 
-        if rel == 1:
+        if rel == 1 and self.camerazoom * 1.1 < self.maxzoom:
             self.camerazoom *= 1.1
-        else:
+
+            new_relsize: Vec2f = (
+                self.rendersize[0] / self.camerazoom,
+                self.rendersize[1] / self.camerazoom
+            )
+
+            self.topleft = (
+                center[0] - new_relsize[0] / 2,
+                center[1] - new_relsize[1] / 2
+            )
+        elif self.camerazoom / 1.1 > self.minzoom:
             self.camerazoom /= 1.1
 
-        new_relsize: Vec2f = (
-            self.rendersize[0] / self.camerazoom,
-            self.rendersize[1] / self.camerazoom
-        )
+            new_relsize: Vec2f = (
+                self.rendersize[0] / self.camerazoom,
+                self.rendersize[1] / self.camerazoom
+            )
 
-        self.topleft = (
-            center[0] - new_relsize[0] / 2,
-            center[1] - new_relsize[1] / 2
-        )
+            self.topleft = (
+                center[0] - new_relsize[0] / 2,
+                center[1] - new_relsize[1] / 2
+            )
 
     def distance_to_camera(self, distance: float) -> float:
         return distance * self.camerazoom
