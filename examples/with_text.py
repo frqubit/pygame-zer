@@ -4,7 +4,7 @@ import pyzer
 
 pygame.init()
 screen = pygame.display.set_mode((1280, 720))
-zerdriver = pyzer.PygameDriver(screen)
+zerdriver = pyzer.PygameDriver(screen, flags=pyzer.F_DEFAULT | pyzer.F_NOCACHE)
 
 font = pygame.freetype.SysFont("Arial", 20)
 
