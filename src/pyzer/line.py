@@ -17,8 +17,13 @@ class Line(Shape):
         width = int(camera.distance_to_camera(1))
         pygame.draw.line(camera.surface, self.fill, p1, p2, width=width)
 
-    def translate(self, x: int, y: int):
-        self.center = (
-            self.center[0] + x,
-            self.center[1] + y
+    def translate(self, x: float, y: float):
+        self.p1 = (
+            self.p1[0] + x,
+            self.p1[1] + y
+        )
+
+        self.p2 = (
+            self.p2[0] + x,
+            self.p2[1] + y
         )

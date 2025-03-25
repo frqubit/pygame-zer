@@ -41,8 +41,10 @@ class Rect(Shape):
             size[1]
         ))
 
-    def translate(self, x: int, y: int):
-        self.center = (
-            self.center[0] + x,
-            self.center[1] + y
+    def translate(self, x: float, y: float):
+        self.rect = (
+            self.rect[0] + x,
+            self.rect[1] + y,
+            self.rect[2],
+            self.rect[3]
         )

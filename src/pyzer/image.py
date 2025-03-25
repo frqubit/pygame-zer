@@ -48,8 +48,8 @@ class Image(Shape):
         if scaled_src is not None:
             camera.surface.blit(scaled_src[1], scaled_src[0])
 
-    def translate(self, x: int, y: int):
-        self.center = (
-            self.center[0] + x,
-            self.center[1] + y
+    def translate(self, x: float, y: float):
+        self.dest = (
+            self.dest[0] + x,
+            self.dest[1] + y
         )

@@ -23,7 +23,7 @@ class Circle(Shape):
         pygame.draw.circle(camera.surface, self.fill, center, radius)
 
 
-    def translate(self, x: int, y: int):
+    def translate(self, x: float, y: float):
         self.center = (
             self.center[0] + x,
             self.center[1] + y
