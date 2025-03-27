@@ -22,7 +22,7 @@ while running:
 
     screen.fill((50, 50, 50))
 
-    zerdriver.draw(screen)
+    zerdriver.draw()
 
     pygame.display.flip()
 

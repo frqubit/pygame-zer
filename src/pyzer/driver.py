@@ -17,7 +17,7 @@ class PygameDriver:
         self.camera = Camera(surface, (0, 0), surface.get_size(), 1)
         self.flags = flags
 
-    def draw(self, surface: pygame.Surface):
+    def draw(self):
         for shape in self.shapes:
             shape.draw(self.camera)
 

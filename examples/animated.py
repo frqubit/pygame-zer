@@ -20,7 +20,7 @@ while running:
 
     screen.fill((50, 50, 50))
 
-    zerdriver.draw(screen)
+    zerdriver.draw()
 
     circle.translate(velocity, 0)
     if ticks_left == 0:
