@@ -1,11 +1,11 @@
 import pygame
 from .camera import Camera
-from .driver import PygameDriver
+from .driver import Driver
 from .shape import Shape
 from .types import Rectf, Color
 
 class Rect(Shape):
-    def __init__(self, driver: PygameDriver, rect: Rectf,
+    def __init__(self, driver: Driver, rect: Rectf,
         fill="black", outlineWidth:float=1, outline:Color=None
     ):
         self.rect = rect

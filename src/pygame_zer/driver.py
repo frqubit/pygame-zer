@@ -11,18 +11,18 @@ class DriverFlags(enum.Flag):
 
 DEFAULT_FLAGS = DriverFlags.ZOOMABLE | DriverFlags.EXPLORABLE
 
-class PygameDriver:
+class Driver:
     def __init__(self, surface: pygame.Surface, flags: DriverFlags = DEFAULT_FLAGS):
-        self.shapes: list[Shape] = []
         self.camera = Camera(surface, (0, 0), surface.get_size(), 1)
+        self.drawer = DriverDrawer(self.camera)
         self.flags = flags
 
+    @property
     def draw(self):
-        for shape in self.shapes:
-            shape.draw(self.camera)
+        return self.drawer
 
     def _insert_shape(self, shape: Shape):
-        self.shapes.append(shape)
+        self.drawer.shapes.append(shape)
 
     def handle_event(self, event: pygame.event.Event) -> bool:
         if DriverFlags.EXPLORABLE in self.flags and event.type == pygame.MOUSEMOTION and event.buttons[0]:
@@ -32,3 +32,12 @@ class PygameDriver:
             self.camera.zoom(event.y)
             return True
         return False
+
+class DriverDrawer:
+    def __init__(self, camera: Camera):
+        self.shapes: list[Shape] = []
+        self.camera = camera
+
+    def __call__(self):
+        for shape in self.shapes:
+            shape.draw(self.camera)

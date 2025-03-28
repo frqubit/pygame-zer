@@ -1,11 +1,11 @@
 import pygame
 from .types import Vec2f
 from .camera import Camera
-from .driver import PygameDriver
+from .driver import Driver
 from .shape import Shape
 
 class Line(Shape):
-    def __init__(self, driver: PygameDriver, p1: Vec2f, p2: Vec2f, fill="black"):
+    def __init__(self, driver: Driver, p1: Vec2f, p2: Vec2f, fill="black"):
         self.p1 = p1
         self.p2 = p2
         self.fill = fill

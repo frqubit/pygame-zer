@@ -2,7 +2,7 @@ import pygame
 import math
 from typing import TypeAlias
 from .camera import Camera
-from .driver import PygameDriver
+from .driver import Driver
 from .shape import Shape
 from .types import Vec2f, Vec2i
 
@@ -12,7 +12,7 @@ ScaledSource: TypeAlias = tuple[
 ]
 
 class Image(Shape):
-    def __init__(self, driver: PygameDriver, source:pygame.Surface, dest:Vec2f):
+    def __init__(self, driver: Driver, source:pygame.Surface, dest:Vec2f):
         self.source = source
         self.dest = dest
         self.size:Vec2f = source.get_size()

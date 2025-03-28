@@ -1,10 +1,10 @@
 import pygame
 from .camera import Camera
-from .driver import PygameDriver
+from .driver import Driver
 from .shape import Shape
 
 class Circle(Shape):
-    def __init__(self, driver: PygameDriver, center: tuple[int, int], radius: float,
+    def __init__(self, driver: Driver, center: tuple[int, int], radius: float,
         fill="black", outlineWidth:float=1, outline=None
     ):
         self.center = center

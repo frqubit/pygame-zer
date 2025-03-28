@@ -1,12 +1,12 @@
 import pygame
 import pygame.freetype
 from .types import Vec2f, Color
-from .driver import PygameDriver, DriverFlags
+from .driver import Driver, DriverFlags
 from .image import Image, ScaledSource
 from .camera import Camera
 
 class Text(Image):
-    def __init__(self, driver: PygameDriver, pos: Vec2f, font: pygame.freetype.Font, text: str,
+    def __init__(self, driver: Driver, pos: Vec2f, font: pygame.freetype.Font, text: str,
         fill:Color="black"
     ):
         source, _ = font.render(text, fgcolor=fill)
