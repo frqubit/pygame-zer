@@ -1,14 +1,14 @@
 import pygame
 import pygame.freetype
-import pyzer
+import pygame_zer
 
 pygame.init()
 screen = pygame.display.set_mode((1280, 720))
-zerdriver = pyzer.PygameDriver(screen, flags=pyzer.F_DEFAULT | pyzer.F_NOCACHE)
+zerdriver = pygame_zer.PygameDriver(screen, flags=pygame_zer.F_DEFAULT | pygame_zer.F_NOCACHE)
 
 font = pygame.freetype.SysFont("Arial", 20)
 
-pyzer.Text(zerdriver, (100, 100), font, "Hello!")
+pygame_zer.Text(zerdriver, (100, 100), font, "Hello!")
 
 running = True
 while running:

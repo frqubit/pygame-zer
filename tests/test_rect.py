@@ -1,24 +1,24 @@
 import pytest
 import pygame
-import pyzer
+import pygame_zer
 from .common import surface_equals_snapshot
 
-def init_driver() -> pyzer.PygameDriver:
+def init_driver() -> pygame_zer.PygameDriver:
     pygame.init()
     screen = pygame.Surface((500, 500))
-    return pyzer.PygameDriver(screen)
+    return pygame_zer.PygameDriver(screen)
 
 def test_shape_implemented():
     driver = init_driver()
 
     try:
-        pyzer.Rect(driver, (100, 100, 50, 50))
+        pygame_zer.Rect(driver, (100, 100, 50, 50))
     except TypeError:
         pytest.fail()
 
 def test_fill_draws():
     driver = init_driver()
-    pyzer.Rect(driver, (100, 100, 50, 78), fill="red")
+    pygame_zer.Rect(driver, (100, 100, 50, 78), fill="red")
 
     driver.camera.surface.fill((0, 0, 0))
     driver.draw()
@@ -28,7 +28,7 @@ def test_fill_draws():
 
 def test_outline_draws():
     driver = init_driver()
-    pyzer.Rect(driver, (100, 100, 50, 76), outline="green", outlineWidth=2)
+    pygame_zer.Rect(driver, (100, 100, 50, 76), outline="green", outlineWidth=2)
     driver.camera.surface.fill((0, 0, 0))
 
     driver.draw()
@@ -37,7 +37,7 @@ def test_outline_draws():
 
 def test_translates():
     driver = init_driver()
-    rect = pyzer.Rect(driver, (100, 125, 65, 30), fill="red")
+    rect = pygame_zer.Rect(driver, (100, 125, 65, 30), fill="red")
 
     driver.camera.surface.fill((0, 0, 0))
 

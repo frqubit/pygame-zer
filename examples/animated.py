@@ -1,11 +1,11 @@
 import pygame
-import pyzer
+import pygame_zer
 
 pygame.init()
 screen = pygame.display.set_mode((1280, 720))
-zerdriver = pyzer.PygameDriver(screen)
+zerdriver = pygame_zer.PygameDriver(screen)
 
-circle = pyzer.Circle(zerdriver, (100, 100), 25, fill="red")
+circle = pygame_zer.Circle(zerdriver, (100, 100), 25, fill="red")
 
 running = True
 velocity = 5

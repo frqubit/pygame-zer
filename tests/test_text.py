@@ -1,26 +1,26 @@
 import pytest
 import pygame, pygame.freetype
-import pyzer
+import pygame_zer
 from .common import surface_equals_snapshot
 
-def init_driver() -> pyzer.PygameDriver:
+def init_driver() -> pygame_zer.PygameDriver:
     pygame.init()
     screen = pygame.Surface((500, 500))
-    return pyzer.PygameDriver(screen)
+    return pygame_zer.PygameDriver(screen)
 
 def test_shape_implemented():
     driver = init_driver()
 
     try:
         font = pygame.freetype.SysFont("Arial", 50)
-        pyzer.Text(driver, (100, 100), font, "HI!")
+        pygame_zer.Text(driver, (100, 100), font, "HI!")
     except TypeError:
         pytest.fail()
 
 def test_fill_draws():
     driver = init_driver()
     font = pygame.freetype.SysFont("Arial", 50)
-    pyzer.Text(driver, (100, 100), font, "HI!", fill="red")
+    pygame_zer.Text(driver, (100, 100), font, "HI!", fill="red")
 
     driver.camera.surface.fill((0, 0, 0))
     driver.draw()
@@ -30,7 +30,7 @@ def test_fill_draws():
 def test_translates():
     driver = init_driver()
     font = pygame.freetype.SysFont("Arial", 50)
-    text = pyzer.Text(driver, (100, 100), font, "HI!", fill="red")
+    text = pygame_zer.Text(driver, (100, 100), font, "HI!", fill="red")
 
     driver.camera.surface.fill((0, 0, 0))
 

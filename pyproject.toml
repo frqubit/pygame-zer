@@ -3,10 +3,10 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "pyzer"
+name = "pygame-zer"
 version = "0.1.0"
 authors = [
-  { name="Carlos Kieliszewski", email="carlos.kieliszewski@gmail.com" },
+    { name = "Carlos Kieliszewski", email = "carlos.kieliszewski@gmail.com" },
 ]
 description = "Zoomable explorable regions for pygame"
 readme = "README.md"
@@ -17,17 +17,13 @@ classifiers = [
 ]
 license = "MIT"
 license-files = ["LICEN[CS]E*"]
-dependencies = [
-    "pygame"
-]
+dependencies = ["pygame"]
 
 [project.urls]
-Homepage = "https://github.com/frqubit/pyzer"
-Issues = "https://github.com/frqubit/pyzer/issues"
+Homepage = "https://github.com/frqubit/pygame-zer"
+Issues = "https://github.com/frqubit/pygame-zer/issues"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
 addopts = "-ra -q"
-testpaths = [
-    "tests"
-]
+testpaths = ["tests"]
