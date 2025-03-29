@@ -1,4 +1,3 @@
-import pygame
 from .types import Vec2f
 from .camera import Camera
 from .driver import Driver
@@ -9,13 +8,11 @@ class Line(Shape):
         self.p1 = p1
         self.p2 = p2
         self.fill = fill
+        self.driver = driver
         driver._insert_shape(self)
 
     def draw(self, camera: Camera):
-        p1 = camera.point_to_camera(self.p1)
-        p2 = camera.point_to_camera(self.p2)
-        width = int(camera.distance_to_camera(1))
-        pygame.draw.line(camera.surface, self.fill, p1, p2, width=width)
+        self.driver.draw.line(self.fill, self.p1, self.p2)
 
     def translate(self, x: float, y: float):
         self.p1 = (
