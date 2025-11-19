@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 name = "pygame-zer"
 version = "0.1.0"
 authors = [
-    { name = "Carlos Kieliszewski", email = "carlos.kieliszewski@gmail.com" },
+    { name = "Carlos Camacho", email = "carlosdcamachoed@gmail.com" },
 ]
 description = "Zoomable explorable regions for pygame"
 readme = "README.md"
