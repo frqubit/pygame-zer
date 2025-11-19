@@ -1,13 +1,20 @@
 import pygame
 import pygame.freetype
-from .types import Vec2f, Color
+
+from .camera import Camera
 from .driver import Driver, DriverFlags
 from .image import Image, ScaledSource
-from .camera import Camera
+from .types import Color, Vec2f
+
 
 class Text(Image):
-    def __init__(self, driver: Driver, pos: Vec2f, font: pygame.freetype.Font, text: str,
-        fill:Color="black"
+    def __init__(
+        self,
+        driver: Driver,
+        pos: Vec2f,
+        font: pygame.freetype.Font,
+        text: str,
+        fill: Color = "black",
     ):
         source, _ = font.render(text, fgcolor=fill)
         super().__init__(driver, source, pos)
@@ -24,6 +31,8 @@ class Text(Image):
 
     def scaled_source(self, camera: Camera) -> ScaledSource | None:
         if self.nocache:
-            self.source, _ = self.font.render(self.text, fgcolor=self.fill, size=self.font_size * camera.camerazoom)
-            self.size = self.source.get_size()
+            self.source, _ = self.font.render(
+                self.text, fgcolor=self.fill, size=self.font_size * camera.camerazoom
+            )
+            self.image_size = self.source.get_size()
         return super().scaled_source(camera)
