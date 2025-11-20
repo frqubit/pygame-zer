@@ -2,3 +2,7 @@ pytest
 pygame
 numpy
 mypy
+sphinx
+sphinx_rtd_theme
+build
+twine
