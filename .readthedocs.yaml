@@ -20,5 +20,7 @@ python:
   install:
     - method: pip
       path: .
+      extra_requirements:
+        - pygame_zer
     - requirements: dev-requirements.txt
     - requirements: docs/requirements.txt
