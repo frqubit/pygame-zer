@@ -22,15 +22,6 @@ class DriverFlags(enum.Flag):
         Allow panning up/down/left/right. Enabled by default
     NOCACHE
         Disable caching, may reduce performance. Disabled by default
-    NO_TOOSMALL
-        Allows shapes that are too small to declare themselves
-        invisible. May improve performance. Enabled by default.
-    NO_OBSCURED
-        Allows shapes that can guarantee themselves outside
-        of the camera range to declare themselves invisible. Can
-        improve performance, but calculations can be overly
-        intensive for certain shapes for the little performance
-        they save. Disabled by default.
 
     Methods
     -------
@@ -44,8 +35,6 @@ class DriverFlags(enum.Flag):
     ZOOMABLE = enum.auto()
     EXPLORABLE = enum.auto()
     NOCACHE = enum.auto()
-    NO_TOOSMALL = enum.auto()
-    NO_OBSCURED = enum.auto()
 
     @staticmethod
     def empty():
@@ -56,11 +45,9 @@ class DriverFlags(enum.Flag):
     def default():
         """Returns the default flags
 
-        The default driver flags enable zooming,
-        exploring, and allows shapes that are too
-        small to calculate themselves as invisible.
+        The default driver flags enable zooming and exploring
         """
-        return DriverFlags.ZOOMABLE | DriverFlags.EXPLORABLE | DriverFlags.NO_TOOSMALL
+        return DriverFlags.ZOOMABLE | DriverFlags.EXPLORABLE
 
 
 class Driver:
