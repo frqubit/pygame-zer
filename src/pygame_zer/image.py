@@ -15,6 +15,39 @@ ScaledSource: TypeAlias = tuple[
 
 
 class Image(Shape):
+    """
+    A pygamezer image. You should use this class if
+    you want to create an image in the driver world. The
+    constructor will add the shape to the driver for
+    you.
+
+    You can set a desired output size in world space
+    in the constructor. If you do, the image will
+    be scaled to fit the requested size, which may
+    change the aspect ratio.
+
+    Attributes
+    ----------
+    dest : pygame_zer.types.Vec2f
+        The topleft of the image in world space
+    driver : pygame_zer.Driver
+        The driver this image is attached to
+    image_size : pygame_zer.types.Vec2f
+        The size of the internal source image. This
+        is not necessarily the same as the original
+        source size, since a custom output size can
+        change the aspect ratio
+    source : pygame.Surface
+        The image/surface to draw. This may
+        be scaled internally to a different
+        size if a custom size argument is
+        specified
+    size : pygame_zer.types.Vec2f, optional
+        The size of the image in world space.
+        Default the original source size
+
+    """
+
     def __init__(
         self,
         driver: Driver,

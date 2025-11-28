@@ -8,6 +8,30 @@ from .types import Color, Vec2f
 
 
 class Text(Image):
+    """
+    A pygamezer text display. You should use this
+    class if you want to create text in the driver
+    world. The constructor will add the shape to the
+    driver for you.
+
+    Text displays extend the image class and are
+    handled the same as images
+
+    Attributes
+    ----------
+    font : pygame.freetype.Font
+        The font to use for the text
+    font_size : float
+        The font size
+    nocache : bool
+        Forces no caching if true. Set in driver flags
+    text : str
+        The text as a string
+    fill : str, default="black"
+        The text color
+
+    """
+
     def __init__(
         self,
         driver: Driver,
