@@ -1,13 +1,15 @@
-import pygame
-import pygame_zer
 import sys
 
+import pygame
+
+import pygame_zer
+
 arg1 = sys.argv[1] if len(sys.argv) > 1 else ["", ""]
-flags = pygame_zer.F_EMPTY
-if 'z' in arg1:
-    flags = flags | pygame_zer.F_ZOOMABLE
-if 'e' in arg1:
-    flags = flags | pygame_zer.F_EXPLORABLE
+flags = pygame_zer.DriverFlags.empty()
+if "z" in arg1:
+    flags |= pygame_zer.DriverFlags.ZOOMABLE
+if "e" in arg1:
+    flags |= pygame_zer.DriverFlags.EXPLORABLE
 
 pygame.init()
 screen = pygame.display.set_mode((1280, 720))

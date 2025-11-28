@@ -16,26 +16,51 @@ class DriverFlags(enum.Flag):
 
     Attributes
     ----------
-    EMPTY
-        A featureless flag. This only exists to create
-        a starting state for building optional flag
-        features. Disabled by default
     ZOOMABLE
         Allow zooming in and out. Enabled by default
     EXPLORABLE
         Allow panning up/down/left/right. Enabled by default
     NOCACHE
         Disable caching, may reduce performance. Disabled by default
+    NO_TOOSMALL
+        Allows shapes that are too small to declare themselves
+        invisible. May improve performance. Enabled by default.
+    NO_OBSCURED
+        Allows shapes that can guarantee themselves outside
+        of the camera range to declare themselves invisible. Can
+        improve performance, but calculations can be overly
+        intensive for certain shapes for the little performance
+        they save. Disabled by default.
+
+    Methods
+    -------
+    default() : DriverFlags
+        Returns the default flags
+    empty() : DriverFlags
+        Returns empty flags
     """
 
-    EMPTY = 1
-    ZOOMABLE = 2
-    EXPLORABLE = 4
-    NOCACHE = 8
+    _NONE = 0
+    ZOOMABLE = enum.auto()
+    EXPLORABLE = enum.auto()
+    NOCACHE = enum.auto()
+    NO_TOOSMALL = enum.auto()
+    NO_OBSCURED = enum.auto()
 
+    @staticmethod
+    def empty():
+        """Returns empty flags"""
+        return DriverFlags._NONE
 
-DEFAULT_FLAGS = DriverFlags.ZOOMABLE | DriverFlags.EXPLORABLE
-"""The default flags for a driver"""
+    @staticmethod
+    def default():
+        """Returns the default flags
+
+        The default driver flags enable zooming,
+        exploring, and allows shapes that are too
+        small to calculate themselves as invisible.
+        """
+        return DriverFlags.ZOOMABLE | DriverFlags.EXPLORABLE | DriverFlags.NO_TOOSMALL
 
 
 class Driver:
@@ -66,7 +91,9 @@ class Driver:
         by shape classes.
     """
 
-    def __init__(self, surface: pygame.Surface, flags: DriverFlags = DEFAULT_FLAGS):
+    def __init__(
+        self, surface: pygame.Surface, flags: DriverFlags = DriverFlags.default()
+    ):
         self.camera = Camera(surface, (0, 0), surface.get_size(), 1)
         self._drawer = DriverDrawer(self.camera)
         self.flags = flags

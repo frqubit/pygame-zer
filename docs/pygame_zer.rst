@@ -52,14 +52,7 @@ module import. These include:
 
 * Driver:
   :py:class:`pygame_zer.driver.Driver`
-
-Flags: :py:class:`pygame_zer.driver.DriverFlags`
-
-* F_EMPTY
-* F_ZOOMABLE
-* F_EXPLORABLE
-* F_NOCACHE
-* F_DEFAULT
+* DriverFlags: :py:class:`pygame_zer.driver.DriverFlags`
 
 Please see the GitHub repository for more examples.
 
