@@ -30,4 +30,8 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = "sphinx_rtd_theme"
-html_static_path = ["_static"]
+if os.environ.get("READTHEDOCS") is None:
+    html_static_path = ["_static"]
+else:
+    REPOSITORY_PATH = os.environ.get("READTHEDOCS_REPOSITORY_PATH")
+    html_static_path = [f"{REPOSITORY_PATH}/docs/_static"]
