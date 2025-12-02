@@ -1,4 +1,7 @@
+import warnings
+
 import pygame
+from typing_extensions import deprecated
 
 from .types import Vec2f, Vec2i
 
@@ -36,13 +39,21 @@ class Camera:
     distance_to_camera(distance:float) : float
         Converts a distance from world space
         to camera space
-    point_to_camera(pt:pygame_zer.types.Vec2f) : pygame_zer.types.Vec2i
+    distance_to_world(distance:float) : float
+        Converts a distance from camera space
+        to world space
+    point_to_camera(pt:pygame_zer.types.Vec2f) : pygame_zer.types.Vec2f
         Converts a point from world space to
         camera space
+    point_to_world(pt:pygame_zer.types.Vec2f) : pygame_zer.types.Vec2f
+        Converts a point from camera space to
+        world space
     translate(rel:pygame_zer.types.Vec2f)
-        Translate the camera in worldspace
+        Translate the camera in camera space
     zoom(rel:float)
         Zooms in or out. rel should be -1 or 1
+    zoom_with_focus(rel:float,focus:pygame_zer.types.Vec2i)
+        Zooms in or out while focusing on a point
     """
 
     def __init__(
@@ -69,12 +80,51 @@ class Camera:
             is in world space.
         """
         self.topleft = (
-            self.topleft[0] - rel[0] / self.camerazoom,
-            self.topleft[1] - rel[1] / self.camerazoom,
+            self.topleft[0] + rel[0] / self.camerazoom,
+            self.topleft[1] + rel[1] / self.camerazoom,
         )
+
+    def zoom_with_focus(self, rel: float, focus: Vec2i):
+        """Zooms in or out while focusing on a point
+
+        This function works identically to `zoom`, but
+        focuses on a specific point instead of focusing on
+        the center. This is often the intended zoom
+        function when using pygamezer in a full program.
+
+        If you don't care where the camera is positioned after
+        zooming, e.g. for simpler pytests, you probably want
+        `zoom` instead.
+
+        Parameters
+        ----------
+        rel : float
+            Whether to zoom in or out. -1 zooms
+            out and 1 zooms in. All other
+            values are unintended behavior.
+        focus : pygame_zer.types.Vec2i
+            Where to focus in camera space
+        """
+
+        focus_world = self.point_to_world(focus)
+        self.zoom(rel)
+        # focus_camera = self.point_to_camera(focus_world)
+
+        new_focus = self.point_to_world(focus)
+
+        translate: Vec2f = (
+            self.distance_to_camera(focus_world[0] - new_focus[0]),
+            self.distance_to_camera(focus_world[1] - new_focus[1]),
+        )
+
+        self.translate(translate)
 
     def zoom(self, rel: float):
         """Zooms in or out. rel should be -1 or 1
+
+        This functions focuses on the center. If you want
+        to focus on a specific point, e.g. where the mouse
+        is, you probably want `zoom_with_focus`.
 
         Parameters
         ----------
@@ -123,7 +173,17 @@ class Camera:
         """
         return distance * self.camerazoom
 
-    def point_to_camera(self, pt: Vec2f) -> Vec2i:
+    def distance_to_world(self, distance: float) -> float:
+        """Converts a distance from camera space to world space
+
+        Parameters
+        ----------
+        distance : float
+            The distance to convert. Must be in camera space.
+        """
+        return distance / self.camerazoom
+
+    def point_to_camera(self, pt: Vec2f) -> Vec2f:
         """Converts a point from world space to camera space
 
         Parameters
@@ -142,8 +202,35 @@ class Camera:
         )
 
         translated = (
-            int(ratios[0] * self.rendersize[0]),
-            int(ratios[1] * self.rendersize[1]),
+            ratios[0] * self.rendersize[0],
+            ratios[1] * self.rendersize[1],
         )
 
         return translated
+
+    def point_to_world(self, pt: Vec2f) -> Vec2f:
+        """Converts a point from camera space to world space
+
+        Parameters
+        ----------
+        pt : pygame_zer.types.Vec2f
+            The point to convert. Must be in camera space.
+        """
+        camerasize: Vec2f = (
+            self.rendersize[0] / self.camerazoom,
+            self.rendersize[1] / self.camerazoom,
+        )
+
+        topleft = self.point_to_camera(self.topleft)
+
+        ratios: Vec2f = (
+            (pt[0] - topleft[0]) / self.rendersize[0],
+            (pt[1] - topleft[1]) / self.rendersize[1],
+        )
+
+        output: Vec2f = (
+            (ratios[0] * camerasize[0]) + self.topleft[0],
+            (ratios[1] * camerasize[1]) + self.topleft[1],
+        )
+
+        return output
