@@ -114,4 +114,8 @@ class CircleHitbox(Hitbox):
                 (other.rect[0] + other.rect[2], other.rect[1] + other.rect[3])
             )
             == CollideResult.YES
+            and self.contains_point((other.rect[0], other.rect[1] + other.rect[3]))
+            == CollideResult.YES
+            and self.contains_point((other.rect[0] + other.rect[2], other.rect[1]))
+            == CollideResult.YES
         )

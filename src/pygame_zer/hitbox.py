@@ -17,6 +17,9 @@ class CollideResult(Enum):
     def for_sure(value: bool):
         return CollideResult.YES if value else CollideResult.NO
 
+    def __bool__(self):
+        return self == CollideResult.YES
+
 
 class Hitbox:
     def __init__(
