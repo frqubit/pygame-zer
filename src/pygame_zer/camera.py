@@ -1,7 +1,6 @@
-import warnings
-
 import pygame
-from typing_extensions import deprecated
+
+from pygame_zer.rect import RectHitbox
 
 from .types import Vec2f, Vec2i
 
@@ -67,7 +66,7 @@ class Camera:
         self.surface = surface
         self.rendersize = rendersize
         self.camerazoom = camerazoom
-        self.maxzoom = 50
+        self.maxzoom: float = 50
         self.minzoom = 0.02
 
     def translate(self, rel: Vec2f):
@@ -82,6 +81,17 @@ class Camera:
         self.topleft = (
             self.topleft[0] + rel[0] / self.camerazoom,
             self.topleft[1] + rel[1] / self.camerazoom,
+        )
+
+    @property
+    def hitbox(self) -> RectHitbox:
+        return RectHitbox(
+            (
+                self.topleft[0],
+                self.topleft[1],
+                self.distance_to_world(self.rendersize[0]),
+                self.distance_to_world(self.rendersize[1]),
+            )
         )
 
     def zoom_with_focus(self, rel: float, focus: Vec2i):

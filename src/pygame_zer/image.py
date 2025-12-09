@@ -1,8 +1,8 @@
-import math
 from typing import TypeAlias
 
 import pygame
 
+from pygame_zer.hitbox import CollideResult
 from pygame_zer.rect import RectHitbox
 
 from .camera import Camera

@@ -1,11 +1,15 @@
 from __future__ import annotations
 
-from pygame_zer.circle import CircleHitbox
-from pygame_zer.hitbox import CollideResult, Hitbox
-from pygame_zer.line import LineHitbox
+from typing import TYPE_CHECKING
 
-from .camera import Camera
-from .driver import Driver
+from pygame_zer.hitbox import CollideResult, Hitbox
+
+if TYPE_CHECKING:
+    from pygame_zer.circle import CircleHitbox
+    from pygame_zer.line import LineHitbox
+
+    from .camera import Camera
+    from .driver import Driver
 from .shape import Shape
 from .types import Color, Rectf, Vec2f
 
@@ -39,7 +43,7 @@ class Rect(Shape):
         rect: Rectf,
         fill="black",
         outlineWidth: float = 1,
-        outline: Color = "black",
+        outline: Color = None,
     ):
         self.rect = rect
         self.fill = fill
@@ -53,9 +57,12 @@ class Rect(Shape):
         return RectHitbox(self.rect)
 
     def draw(self, camera: Camera):
-        if self.outline is not None:
-            self.driver.draw.rect(self.outline, self.rect, width=self.outlineWidth)
-        self.driver.draw.rect(self.fill, self.rect)
+        if self.hitbox.contains_hitbox(camera.hitbox) == CollideResult.YES:
+            camera.surface.fill(self.fill)
+        else:
+            if self.outline is not None:
+                self.driver.draw.rect(self.outline, self.rect, width=self.outlineWidth)
+            self.driver.draw.rect(self.fill, self.rect)
 
     def translate(self, x: float, y: float):
         self.rect = (self.rect[0] + x, self.rect[1] + y, self.rect[2], self.rect[3])

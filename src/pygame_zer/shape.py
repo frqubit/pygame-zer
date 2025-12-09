@@ -1,8 +1,10 @@
 from abc import abstractmethod
+from typing import TYPE_CHECKING
 
 from pygame_zer.hitbox import Hitbox
 
-from .camera import Camera
+if TYPE_CHECKING:
+    from .camera import Camera
 
 
 class Shape:
@@ -28,7 +30,7 @@ class Shape:
         return Hitbox.none()
 
     @abstractmethod
-    def draw(self, camera: Camera):
+    def draw(self, camera: "Camera"):
         """Draws the shape to the camera specified.
 
         Parameters
