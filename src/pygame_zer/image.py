@@ -3,6 +3,8 @@ from typing import TypeAlias
 
 import pygame
 
+from pygame_zer.rect import RectHitbox
+
 from .camera import Camera
 from .driver import Driver
 from .shape import Shape
@@ -71,8 +73,11 @@ class Image(Shape):
         self.size = size if size is not None else self.image_size
         driver._insert_shape(self)
 
+    @property
+    def hitbox(self) -> RectHitbox:
+        return RectHitbox((self.dest[0], self.dest[1], self.size[0], self.size[1]))
+
     def scaled_source(self, camera: Camera) -> ScaledSource | None:
-        zoom = camera.camerazoom
         topleft = camera.point_to_camera(self.dest)
         bottomright = camera.point_to_camera(
             (self.dest[0] + self.size[0], self.dest[1] + self.size[1])

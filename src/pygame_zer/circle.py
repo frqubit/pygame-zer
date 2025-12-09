@@ -1,3 +1,11 @@
+from __future__ import annotations
+
+import math
+from typing import Self
+
+from pygame_zer.hitbox import CollideResult, Hitbox
+from pygame_zer.types import Vec2f
+
 from .camera import Camera
 from .driver import Driver
 from .shape import Shape
@@ -45,6 +53,10 @@ class Circle(Shape):
         self.driver = driver
         driver._insert_shape(self)
 
+    @property
+    def hitbox(self) -> CircleHitbox:
+        return CircleHitbox(self.center, self.radius)
+
     def draw(self, camera: Camera):
         self.driver.draw.circle(self.fill, self.center, self.radius)
         if self.outline is not None:
@@ -54,3 +66,38 @@ class Circle(Shape):
 
     def translate(self, x: float, y: float):
         self.center = (self.center[0] + x, self.center[1] + y)
+
+
+class CircleHitbox(Hitbox):
+    def __init__(self, center: Vec2f, radius: float):
+        super().__init__(
+            "circle",
+            {"circle": self.collides_with_circle},
+            {"circle": self.contains_circle},
+        )
+
+        self.center = center
+        self.radius = radius
+
+    def contains_point(self, pt: Vec2f) -> CollideResult:
+        distance = math.sqrt(
+            (self.center[0] - pt[0]) ** 2 + (self.center[1] - pt[1]) ** 2
+        )
+
+        return CollideResult.for_sure(distance <= self.radius)
+
+    def collides_with_circle(self, other: Self) -> CollideResult:
+        distance = math.sqrt(
+            (self.center[0] - other.center[0]) ** 2
+            + (self.center[1] - other.center[1]) ** 2
+        )
+
+        return CollideResult.for_sure(distance <= self.radius + other.radius)
+
+    def contains_circle(self, other: Self) -> CollideResult:
+        distance = math.sqrt(
+            (self.center[0] - other.center[0]) ** 2
+            + (self.center[1] - other.center[1]) ** 2
+        )
+
+        return CollideResult.for_sure(distance + other.radius <= self.radius)

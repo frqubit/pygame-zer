@@ -1,5 +1,7 @@
 from abc import abstractmethod
 
+from pygame_zer.hitbox import Hitbox
+
 from .camera import Camera
 
 
@@ -19,6 +21,11 @@ class Shape:
     translate(x,y)
         Moves the shape the specified distance in world space.
     """
+
+    @property
+    @abstractmethod
+    def hitbox(self) -> Hitbox:
+        return Hitbox.none()
 
     @abstractmethod
     def draw(self, camera: Camera):
