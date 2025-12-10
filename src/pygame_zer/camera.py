@@ -69,6 +69,10 @@ class Camera:
         self.maxzoom: float = 50
         self.minzoom = 0.02
 
+    def set_zoom_limits(self, zoom_in, zoom_out):
+        self.minzoom = 1 / zoom_out
+        self.maxzoom = zoom_in
+
     def translate(self, rel: Vec2f):
         """Translate the camera in worldspace
 
@@ -148,8 +152,10 @@ class Camera:
             self.topleft[1] + ((self.rendersize[1] / self.camerazoom) / 2),
         )
 
-        if rel == 1 and self.camerazoom * 1.1 < self.maxzoom:
-            self.camerazoom *= 1.1
+        multiply_by = rel if rel > 0 else 1 / -rel
+
+        if multiply_by > 1 and self.camerazoom * multiply_by < self.maxzoom:
+            self.camerazoom *= multiply_by
 
             new_relsize: Vec2f = (
                 self.rendersize[0] / self.camerazoom,
@@ -160,8 +166,8 @@ class Camera:
                 center[0] - new_relsize[0] / 2,
                 center[1] - new_relsize[1] / 2,
             )
-        elif self.camerazoom / 1.1 > self.minzoom:
-            self.camerazoom /= 1.1
+        elif multiply_by < 1 and self.camerazoom * multiply_by > self.minzoom:
+            self.camerazoom *= multiply_by
 
             new_relsize: Vec2f = (
                 self.rendersize[0] / self.camerazoom,

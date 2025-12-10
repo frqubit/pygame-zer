@@ -84,6 +84,7 @@ class Driver:
         self.camera = Camera(surface, (0, 0), surface.get_size(), 1)
         self._drawer = DriverDrawer(self.camera)
         self.flags = flags
+        self.zoom_sensitivity = 1.1
 
     @property
     def draw(self):
@@ -138,9 +139,9 @@ class Driver:
         elif DriverFlags.ZOOMABLE in self.flags and event.type == pygame.MOUSEWHEEL:
             if DriverFlags.EXPLORABLE in self.flags:
                 mouse_pos = pygame.mouse.get_pos()
-                self.camera.zoom_with_focus(event.y, mouse_pos)
+                self.camera.zoom_with_focus(event.y * self.zoom_sensitivity, mouse_pos)
             else:
-                self.camera.zoom(event.y)
+                self.camera.zoom(event.y * self.zoom_sensitivity)
             return True
         return False
 

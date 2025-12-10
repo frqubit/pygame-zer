@@ -8,8 +8,8 @@ screen = pygame.display.set_mode((1024, 720))
 driver = pygame_zer.Driver(screen, flags=pygame_zer.DriverFlags.ZOOMABLE)
 display_font = pygame.font.SysFont("Arial", 10)
 
-driver.camera.minzoom = 1e-15
-driver.camera.maxzoom = 1e25
+driver.camera.set_zoom_limits(1e15, 1e25)
+driver.zoom_sensitivity = 1.5
 
 pygame_zer.Circle(driver, (512, 360), 1)
 image = pygame.image.load("examples/ducks.jpg")
