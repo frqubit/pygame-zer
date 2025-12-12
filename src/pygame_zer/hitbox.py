@@ -21,9 +21,17 @@ class CollideResult(Enum):
         return self == CollideResult.YES
 
 
+AnyHitbox = TypeVar("AnyHitbox", bound="Hitbox")
+
+CollisionMap: TypeAlias = dict[str, Callable[[AnyHitbox], CollideResult]]
+
+
 class Hitbox:
     def __init__(
-        self, variant: str, collides_map: CollisionMap, contains_map: CollisionMap
+        self,
+        variant: str,
+        collides_map: CollisionMap,
+        contains_map: CollisionMap,
     ):
         self._variant = variant
         self._collides_map = collides_map
@@ -52,8 +60,3 @@ class Hitbox:
         if hitbox._variant in self._contains_map:
             return self._contains_map[hitbox._variant](hitbox)
         return CollideResult.UNSURE
-
-
-AnyHitbox = TypeVar("AnyHitbox", bound=Hitbox)
-
-CollisionMap: TypeAlias = dict[Type[AnyHitbox], Callable[[AnyHitbox], CollideResult]]

@@ -4,7 +4,7 @@ import pygame.freetype
 from .camera import Camera
 from .driver import Driver, DriverFlags
 from .image import Image, ScaledSource
-from .types import Color, Vec2f, Vec2fAble
+from .types import Color, F, Vec2fAble, f, vec2f
 
 
 class Text(Image):
@@ -48,15 +48,17 @@ class Text(Image):
         self.nocache = DriverFlags.NOCACHE in driver.flags
 
     @property
-    def font_size(self) -> float:
+    def font_size(self) -> F:
         if isinstance(self.font.size, list | tuple):
-            return self.font.size[0]
-        return self.font.size
+            return f(self.font.size[0])
+        return f(self.font.size)
 
     def scaled_source(self, camera: Camera) -> ScaledSource | None:
         if self.nocache:
             self.source, _ = self.font.render(
-                self.text, fgcolor=self.fill, size=self.font_size * camera.camerazoom
+                self.text,
+                fgcolor=self.fill,
+                size=float(self.font_size * camera.camerazoom),
             )
-            self.image_size = self.source.get_size()
+            self.image_size = vec2f(*self.source.get_size())
         return super().scaled_source(camera)

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import math
+from decimal import Decimal
 from typing import Self
 
 from pygame_zer.hitbox import CollideResult, Hitbox
@@ -100,7 +101,7 @@ class CircleHitbox(Hitbox):
         return CollideResult.for_sure(distance <= self.radius + other.radius)
 
     def contains_circle(self, other: Self) -> CollideResult:
-        distance = math.sqrt(
+        distance = Decimal.sqrt(
             (self.center[0] - other.center[0]) ** 2
             + (self.center[1] - other.center[1]) ** 2
         )

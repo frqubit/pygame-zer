@@ -156,19 +156,9 @@ class Camera:
 
         multiply_by = rel if rel > 0 else 1 / -rel
 
-        if multiply_by > 1 and self.camerazoom * multiply_by < self.maxzoom:
-            self.camerazoom *= multiply_by
-
-            new_relsize: Vec2f = (
-                self.rendersize[0] / self.camerazoom,
-                self.rendersize[1] / self.camerazoom,
-            )
-
-            self.topleft = (
-                center[0] - new_relsize[0] / 2,
-                center[1] - new_relsize[1] / 2,
-            )
-        elif multiply_by < 1 and self.camerazoom * multiply_by > self.minzoom:
+        if (multiply_by > 1 and self.camerazoom * multiply_by < self.maxzoom) or (
+            multiply_by < 1 and self.camerazoom * multiply_by > self.minzoom
+        ):
             self.camerazoom *= multiply_by
 
             new_relsize: Vec2f = (

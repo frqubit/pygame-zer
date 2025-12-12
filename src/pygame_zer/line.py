@@ -63,7 +63,7 @@ class LineHitbox(Hitbox):
         self.yint = None if self.slope is None else p1[1] - (self.slope * p1[0])
 
     def contains_point(self, pt: Vec2f) -> CollideResult:
-        if self.slope is None:
+        if self.slope is None or self.yint is None:
             return CollideResult.for_sure(
                 pt[0] == self.p1[0]
                 and pt[1] >= min(self.p1[1], self.p2[1]) - EPSILON
@@ -89,7 +89,8 @@ class LineHitbox(Hitbox):
 
     def collides_with_line(self, other: LineHitbox) -> CollideResult:
         if self.slope == other.slope:
-            if self.slope is None:
+            # TODO organize slope/yint type
+            if self.slope is None or self.yint is None or other.yint is None:
                 return CollideResult.for_sure(
                     abs(self.p1[0] - other.p1[0]) < EPSILON
                     and not (

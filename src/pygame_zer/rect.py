@@ -43,7 +43,7 @@ class Rect(Shape):
         rect: RectfAble,
         fill="black",
         outlineWidth: FAble = 1,
-        outline: Color = None,
+        outline: Color | None = None,
     ):
         self.rect = rectf(*rect)
         self.fill = fill
