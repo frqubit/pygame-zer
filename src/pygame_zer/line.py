@@ -1,9 +1,12 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from pygame_zer.hitbox import CollideResult, Hitbox
 
-from .camera import Camera
-from .driver import Driver
+if TYPE_CHECKING:
+    from .camera import Camera
+    from .driver import Driver
 from .shape import Shape
 from .types import EPSILON, FAble, Vec2f, Vec2fAble, f, vec2f
 
@@ -29,7 +32,7 @@ class Line(Shape):
 
     """
 
-    def __init__(self, driver: Driver, p1: Vec2fAble, p2: Vec2fAble, fill="black"):
+    def __init__(self, driver: "Driver", p1: Vec2fAble, p2: Vec2fAble, fill="black"):
         self.p1 = vec2f(*p1)
         self.p2 = vec2f(*p2)
         self.fill = fill
@@ -40,7 +43,7 @@ class Line(Shape):
     def hitbox(self) -> Hitbox:
         return LineHitbox(self.p1, self.p2)
 
-    def draw(self, camera: Camera):
+    def draw(self, camera: "Camera"):
         self.driver.draw.line(self.fill, self.p1, self.p2)
 
     def translate(self, x: FAble, y: FAble):

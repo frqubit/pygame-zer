@@ -3,10 +3,10 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from pygame_zer.hitbox import CollideResult, Hitbox
+from pygame_zer.line import LineHitbox
 
 if TYPE_CHECKING:
     from pygame_zer.circle import CircleHitbox
-    from pygame_zer.line import LineHitbox
 
     from .camera import Camera
     from .driver import Driver

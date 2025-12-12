@@ -2,9 +2,10 @@ import pygame
 import pytest
 
 import pygame_zer
+from pygame_zer.circle import CircleHitbox
 from pygame_zer.hitbox import CollideResult
 from pygame_zer.line import LineHitbox
-from pygame_zer.rect import CircleHitbox, RectHitbox
+from pygame_zer.rect import RectHitbox
 
 from .common import surface_equals_snapshot
 
