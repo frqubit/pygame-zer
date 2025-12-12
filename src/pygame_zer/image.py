@@ -65,7 +65,9 @@ class Image(Shape):
             source_scale_val = (size[0] / size[1]) / (
                 f(source.get_width() / source.get_height())
             )
-            self.source = pygame.transform.scale_by(source, (source_scale_val, 1))
+            self.source = pygame.transform.scale_by(
+                source, (float(source_scale_val), 1)
+            )
         else:
             self.source = source
         self.dest: Vec2f = vec2f(*dest)
@@ -90,7 +92,7 @@ class Image(Shape):
             # Too far left or up
             return None
 
-        content_topleft = [max(tl, 0) for tl in topleft]
+        content_topleft = [max(tl, f(0)) for tl in topleft]
         content_bottomright = [
             min(br, rs) for br, rs in zip(bottomright, camera.rendersize)
         ]
@@ -127,19 +129,17 @@ class Image(Shape):
         scaled = pygame.transform.smoothscale_by(
             segment,
             (
-                content_size[0] / segment.get_width(),
-                content_size[1] / segment.get_height(),
+                float(content_size[0] / segment.get_width()),
+                float(content_size[1] / segment.get_height()),
             ),
         )
 
-        return ((content_topleft[0], content_topleft[1]), scaled)
+        return ((int(content_topleft[0]), int(content_topleft[1])), scaled)
 
     def draw(self, camera: Camera):
         scaled_src = self.scaled_source(camera)
         if scaled_src is not None:
-            camera.surface.blit(
-                scaled_src[1], (int(scaled_src[0][0]), int(scaled_src[0][1]))
-            )
+            camera.surface.blit(scaled_src[1], scaled_src[0])
 
     def translate(self, x: FAble, y: FAble):
         self.dest = (self.dest[0] + f(x), self.dest[1] + f(y))
