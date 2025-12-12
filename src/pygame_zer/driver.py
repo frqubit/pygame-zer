@@ -4,7 +4,7 @@ import pygame
 
 from .camera import Camera
 from .shape import Shape
-from .types import Color, Rectf, Vec2f
+from .types import Color, F, FAble, Rectf, RectfAble, Vec2f, Vec2fAble
 
 
 class DriverFlags(enum.Flag):
@@ -171,7 +171,7 @@ class DriverDrawer:
         for shape in self.shapes:
             shape.draw(self.camera)
 
-    def circle(self, color: Color, center: Vec2f, radius: float, width: float = 0):
+    def circle(self, color: Color, center: Vec2fAble, radius: FAble, width: FAble = 0):
         """Draw a circle immediately"""
         center = self.camera.point_to_camera(center)
         radius = self.camera.distance_to_camera(radius)
@@ -180,9 +180,15 @@ class DriverDrawer:
         # outlineRadius = ((self.outlineWidth + self.radius) / self.radius) * radius
         # if self.outline is not None:
         #     pygame.draw.circle(camera.surface, self.outline, center, outlineRadius)
-        pygame.draw.circle(self.camera.surface, color, center, radius, width=int(width))
+        pygame.draw.circle(
+            self.camera.surface,
+            color,
+            (int(center[0]), int(center[1])),
+            int(radius),
+            width=int(width),
+        )
 
-    def rect(self, color: Color, rect: Rectf, width: float = 0):
+    def rect(self, color: Color, rect: RectfAble, width: FAble = 0):
         """Draw a rectangle immediately"""
         topleft = self.camera.point_to_camera(rect[0:2])
         size = [self.camera.distance_to_camera(x) for x in rect[2:]]
@@ -192,17 +198,25 @@ class DriverDrawer:
             self.camera.surface,
             color,
             (
-                topleft[0] - width,
-                topleft[1] - width,
-                size[0] + width * 2,
-                size[1] + width * 2,
+                int(topleft[0] - width),
+                int(topleft[1] - width),
+                int(size[0] + width * 2),
+                int(size[1] + width * 2),
             ),
             width=int(width),
         )
 
-    def line(self, color: Color, start_pos: Vec2f, end_pos: Vec2f, width: float = 1):
+    def line(
+        self, color: Color, start_pos: Vec2fAble, end_pos: Vec2fAble, width: FAble = 1
+    ):
         """Draw a line immediately"""
         p1 = self.camera.point_to_camera(start_pos)
         p2 = self.camera.point_to_camera(end_pos)
         width = int(self.camera.distance_to_camera(1))
-        pygame.draw.line(self.camera.surface, color, p1, p2, width=width)
+        pygame.draw.line(
+            self.camera.surface,
+            color,
+            (int(p1[0]), int(p1[1])),
+            (int(p2[0]), int(p2[1])),
+            width=width,
+        )

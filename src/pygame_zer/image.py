@@ -2,13 +2,12 @@ from typing import TypeAlias
 
 import pygame
 
-from pygame_zer.hitbox import CollideResult
 from pygame_zer.rect import RectHitbox
 
 from .camera import Camera
 from .driver import Driver
 from .shape import Shape
-from .types import Vec2f, Vec2i
+from .types import F, FAble, Vec2f, Vec2fAble, Vec2i, f, vec2f
 
 ScaledSource: TypeAlias = tuple[
     Vec2i,  # position on screen
@@ -54,23 +53,24 @@ class Image(Shape):
         self,
         driver: Driver,
         source: pygame.Surface,
-        dest: Vec2f,
-        size: Vec2f | None = None,
+        dest: Vec2fAble,
+        size: Vec2fAble | None = None,
     ):
         # a/b * x = c/d
         # x = (c/d)/(a/b)
 
         # If size is not none, rescale to appropriate size
         if size is not None:
+            size = vec2f(*size)
             source_scale_val = (size[0] / size[1]) / (
-                source.get_width() / source.get_height()
+                f(source.get_width() / source.get_height())
             )
             self.source = pygame.transform.scale_by(source, (source_scale_val, 1))
         else:
             self.source = source
-        self.dest = dest
-        self.image_size: Vec2f = self.source.get_size()
-        self.size = size if size is not None else self.image_size
+        self.dest: Vec2f = vec2f(*dest)
+        self.image_size: Vec2f = vec2f(*self.source.get_size())
+        self.size = vec2f(*size) if size is not None else self.image_size
         driver._insert_shape(self)
 
     @property
@@ -117,10 +117,10 @@ class Image(Shape):
 
         segment = self.source.subsurface(
             (
-                image_tl[0],
-                image_tl[1],
-                image_br[0] - image_tl[0],
-                image_br[1] - image_tl[1],
+                int(image_tl[0]),
+                int(image_tl[1]),
+                int(image_br[0] - image_tl[0]),
+                int(image_br[1] - image_tl[1]),
             )
         )
 
@@ -137,7 +137,9 @@ class Image(Shape):
     def draw(self, camera: Camera):
         scaled_src = self.scaled_source(camera)
         if scaled_src is not None:
-            camera.surface.blit(scaled_src[1], scaled_src[0])
+            camera.surface.blit(
+                scaled_src[1], (int(scaled_src[0][0]), int(scaled_src[0][1]))
+            )
 
-    def translate(self, x: float, y: float):
-        self.dest = (self.dest[0] + x, self.dest[1] + y)
+    def translate(self, x: FAble, y: FAble):
+        self.dest = (self.dest[0] + f(x), self.dest[1] + f(y))

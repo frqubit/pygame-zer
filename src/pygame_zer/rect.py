@@ -11,7 +11,7 @@ if TYPE_CHECKING:
     from .camera import Camera
     from .driver import Driver
 from .shape import Shape
-from .types import Color, Rectf, Vec2f
+from .types import Color, FAble, Rectf, RectfAble, Vec2f, f, rectf
 
 
 class Rect(Shape):
@@ -40,15 +40,15 @@ class Rect(Shape):
     def __init__(
         self,
         driver: Driver,
-        rect: Rectf,
+        rect: RectfAble,
         fill="black",
-        outlineWidth: float = 1,
+        outlineWidth: FAble = 1,
         outline: Color = None,
     ):
-        self.rect = rect
+        self.rect = rectf(*rect)
         self.fill = fill
         self.outline = outline
-        self.outlineWidth = outlineWidth
+        self.outlineWidth = f(outlineWidth)
         self.driver = driver
         driver._insert_shape(self)
 
@@ -64,8 +64,13 @@ class Rect(Shape):
                 self.driver.draw.rect(self.outline, self.rect, width=self.outlineWidth)
             self.driver.draw.rect(self.fill, self.rect)
 
-    def translate(self, x: float, y: float):
-        self.rect = (self.rect[0] + x, self.rect[1] + y, self.rect[2], self.rect[3])
+    def translate(self, x: FAble, y: FAble):
+        self.rect = (
+            self.rect[0] + f(x),
+            self.rect[1] + f(y),
+            self.rect[2],
+            self.rect[3],
+        )
 
 
 class RectHitbox(Hitbox):

@@ -5,7 +5,7 @@ from pygame_zer.hitbox import CollideResult, Hitbox
 from .camera import Camera
 from .driver import Driver
 from .shape import Shape
-from .types import EPSILON, Vec2f
+from .types import EPSILON, FAble, Vec2f, Vec2fAble, f, vec2f
 
 
 class Line(Shape):
@@ -29,9 +29,9 @@ class Line(Shape):
 
     """
 
-    def __init__(self, driver: Driver, p1: Vec2f, p2: Vec2f, fill="black"):
-        self.p1 = p1
-        self.p2 = p2
+    def __init__(self, driver: Driver, p1: Vec2fAble, p2: Vec2fAble, fill="black"):
+        self.p1 = vec2f(*p1)
+        self.p2 = vec2f(*p2)
         self.fill = fill
         self.driver = driver
         driver._insert_shape(self)
@@ -43,10 +43,10 @@ class Line(Shape):
     def draw(self, camera: Camera):
         self.driver.draw.line(self.fill, self.p1, self.p2)
 
-    def translate(self, x: float, y: float):
-        self.p1 = (self.p1[0] + x, self.p1[1] + y)
+    def translate(self, x: FAble, y: FAble):
+        self.p1 = (self.p1[0] + f(x), self.p1[1] + f(y))
 
-        self.p2 = (self.p2[0] + x, self.p2[1] + y)
+        self.p2 = (self.p2[0] + f(x), self.p2[1] + f(y))
 
 
 class LineHitbox(Hitbox):

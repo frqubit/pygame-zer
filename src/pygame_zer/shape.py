@@ -2,6 +2,7 @@ from abc import abstractmethod
 from typing import TYPE_CHECKING
 
 from pygame_zer.hitbox import Hitbox
+from pygame_zer.types import FAble
 
 if TYPE_CHECKING:
     from .camera import Camera
@@ -41,7 +42,7 @@ class Shape:
         raise NotImplementedError("Shape is an abstract class")
 
     @abstractmethod
-    def translate(self, x: float, y: float):
+    def translate(self, x: FAble, y: FAble):
         """Moves the shape the specified distance in world space.
 
         Parameters

@@ -2,7 +2,7 @@ import pygame
 
 from pygame_zer.rect import RectHitbox
 
-from .types import Vec2f, Vec2i
+from .types import F, FAble, Vec2f, Vec2fAble, Vec2i, f, vec2f
 
 
 class Camera:
@@ -58,22 +58,22 @@ class Camera:
     def __init__(
         self,
         surface: pygame.Surface,
-        topleft: Vec2f,
-        rendersize: Vec2f,
-        camerazoom: float,
+        topleft: Vec2fAble,
+        rendersize: Vec2fAble,
+        camerazoom: FAble,
     ):
-        self.topleft = topleft
+        self.topleft = vec2f(*topleft)
         self.surface = surface
-        self.rendersize = rendersize
-        self.camerazoom = camerazoom
-        self.maxzoom: float = 50
-        self.minzoom = 0.02
+        self.rendersize = vec2f(*rendersize)
+        self.camerazoom = f(camerazoom)
+        self.maxzoom = f(50)
+        self.minzoom = f(0.02)
 
-    def set_zoom_limits(self, zoom_in, zoom_out):
-        self.minzoom = 1 / zoom_out
-        self.maxzoom = zoom_in
+    def set_zoom_limits(self, zoom_in: FAble, zoom_out: FAble):
+        self.minzoom = 1 / f(zoom_out)
+        self.maxzoom = f(zoom_in)
 
-    def translate(self, rel: Vec2f):
+    def translate(self, rel: Vec2fAble):
         """Translate the camera in worldspace
 
         Parameters
@@ -83,8 +83,8 @@ class Camera:
             is in world space.
         """
         self.topleft = (
-            self.topleft[0] + rel[0] / self.camerazoom,
-            self.topleft[1] + rel[1] / self.camerazoom,
+            self.topleft[0] + f(rel[0]) / self.camerazoom,
+            self.topleft[1] + f(rel[1]) / self.camerazoom,
         )
 
     @property
@@ -98,7 +98,7 @@ class Camera:
             )
         )
 
-    def zoom_with_focus(self, rel: float, focus: Vec2i):
+    def zoom_with_focus(self, rel: FAble, focus: Vec2i):
         """Zooms in or out while focusing on a point
 
         This function works identically to `zoom`, but
@@ -126,14 +126,14 @@ class Camera:
 
         new_focus = self.point_to_world(focus)
 
-        translate: Vec2f = (
+        translate = (
             self.distance_to_camera(focus_world[0] - new_focus[0]),
             self.distance_to_camera(focus_world[1] - new_focus[1]),
         )
 
         self.translate(translate)
 
-    def zoom(self, rel: float):
+    def zoom(self, rel: FAble):
         """Zooms in or out. rel should be -1 or 1
 
         This functions focuses on the center. If you want
@@ -147,10 +147,12 @@ class Camera:
             out and 1 zooms in. All other
             values are unintended behavior.
         """
-        center: Vec2f = (
+        center: Vec2f = vec2f(
             self.topleft[0] + ((self.rendersize[0] / self.camerazoom) / 2),
             self.topleft[1] + ((self.rendersize[1] / self.camerazoom) / 2),
         )
+
+        rel = f(rel)
 
         multiply_by = rel if rel > 0 else 1 / -rel
 
@@ -179,7 +181,7 @@ class Camera:
                 center[1] - new_relsize[1] / 2,
             )
 
-    def distance_to_camera(self, distance: float) -> float:
+    def distance_to_camera(self, distance: FAble) -> F:
         """Converts a distance from world space to camera space
 
         Parameters
@@ -187,9 +189,9 @@ class Camera:
         distance : float
             The distance to convert. Must be in world space.
         """
-        return distance * self.camerazoom
+        return f(distance) * self.camerazoom
 
-    def distance_to_world(self, distance: float) -> float:
+    def distance_to_world(self, distance: FAble) -> F:
         """Converts a distance from camera space to world space
 
         Parameters
@@ -197,9 +199,9 @@ class Camera:
         distance : float
             The distance to convert. Must be in camera space.
         """
-        return distance / self.camerazoom
+        return f(distance) / self.camerazoom
 
-    def point_to_camera(self, pt: Vec2f) -> Vec2f:
+    def point_to_camera(self, pt: Vec2fAble) -> Vec2f:
         """Converts a point from world space to camera space
 
         Parameters
@@ -207,6 +209,8 @@ class Camera:
         pt : pygame_zer.types.Vec2f
             The point to convert. Must be in world space.
         """
+        pt = vec2f(*pt)
+
         camerasize: Vec2f = (
             self.rendersize[0] / self.camerazoom,
             self.rendersize[1] / self.camerazoom,
@@ -224,7 +228,7 @@ class Camera:
 
         return translated
 
-    def point_to_world(self, pt: Vec2f) -> Vec2f:
+    def point_to_world(self, pt: Vec2fAble) -> Vec2f:
         """Converts a point from camera space to world space
 
         Parameters
@@ -232,6 +236,8 @@ class Camera:
         pt : pygame_zer.types.Vec2f
             The point to convert. Must be in camera space.
         """
+        pt = vec2f(*pt)
+
         camerasize: Vec2f = (
             self.rendersize[0] / self.camerazoom,
             self.rendersize[1] / self.camerazoom,

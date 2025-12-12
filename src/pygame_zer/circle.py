@@ -5,7 +5,7 @@ from typing import Self
 
 from pygame_zer.hitbox import CollideResult, Hitbox
 from pygame_zer.rect import RectHitbox
-from pygame_zer.types import Vec2f
+from pygame_zer.types import F, FAble, Vec2f, Vec2fAble, f, vec2f
 
 from .camera import Camera
 from .driver import Driver
@@ -40,17 +40,17 @@ class Circle(Shape):
     def __init__(
         self,
         driver: Driver,
-        center: tuple[int, int],
-        radius: float,
+        center: Vec2fAble,
+        radius: FAble,
         fill="black",
-        outlineWidth: float = 1,
+        outlineWidth: FAble = 1,
         outline=None,
     ):
-        self.center = center
-        self.radius = radius
+        self.center: Vec2f = vec2f(*center)
+        self.radius: F = f(radius)
         self.fill = fill
         self.outline = outline
-        self.outlineWidth = outlineWidth
+        self.outlineWidth: F = f(outlineWidth)
         self.driver = driver
         driver._insert_shape(self)
 
@@ -69,12 +69,12 @@ class Circle(Shape):
                     self.outline, self.center, self.radius, width=self.outlineWidth
                 )
 
-    def translate(self, x: float, y: float):
-        self.center = (self.center[0] + x, self.center[1] + y)
+    def translate(self, x: FAble, y: FAble):
+        self.center = (self.center[0] + f(x), self.center[1] + f(y))
 
 
 class CircleHitbox(Hitbox):
-    def __init__(self, center: Vec2f, radius: float):
+    def __init__(self, center: Vec2f, radius: F):
         super().__init__(
             "circle",
             {"circle": self.collides_with_circle},

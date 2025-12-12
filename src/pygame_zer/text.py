@@ -4,7 +4,7 @@ import pygame.freetype
 from .camera import Camera
 from .driver import Driver, DriverFlags
 from .image import Image, ScaledSource
-from .types import Color, Vec2f
+from .types import Color, Vec2f, Vec2fAble
 
 
 class Text(Image):
@@ -35,7 +35,7 @@ class Text(Image):
     def __init__(
         self,
         driver: Driver,
-        pos: Vec2f,
+        pos: Vec2fAble,
         font: pygame.freetype.Font,
         text: str,
         fill: Color = "black",
