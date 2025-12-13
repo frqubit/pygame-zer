@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Tuple
 
 from .camera import Camera
 from .driver import Driver
@@ -23,8 +23,7 @@ class Line(Shape):
 class LineHitbox(Hitbox):
     p1: Vec2f
     p2: Vec2f
-    slope: F | None
-    yint: F | None
+    slope_yint: None | Tuple[F, F]
 
     def __init__(self, p1: Vec2fAble, p2: Vec2fAble) -> None: ...
     def contains_point(self, pt: Vec2fAble) -> CollideResult: ...

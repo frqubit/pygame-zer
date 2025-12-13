@@ -1,5 +1,5 @@
 from decimal import Decimal
-from typing import TypeAlias
+from typing import TypeAlias, TypeVar
 
 Vec2i: TypeAlias = tuple[int, int]
 Vec2f: TypeAlias = tuple[Decimal, Decimal]

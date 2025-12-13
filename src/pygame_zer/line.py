@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, cast
 
 from pygame_zer.hitbox import CollideResult, Hitbox
 
@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from .camera import Camera
     from .driver import Driver
 from .shape import Shape
-from .types import EPSILON, FAble, Vec2f, Vec2fAble, f, vec2f
+from .types import EPSILON, F, FAble, Vec2fAble, f, vec2f
 
 
 class Line(Shape):
@@ -61,12 +61,16 @@ class LineHitbox(Hitbox):
         p2 = vec2f(*p2)
         self.p1 = p1
         self.p2 = p2
-        self.slope = None if p1[0] == p2[0] else (p2[1] - p1[1]) / (p2[0] - p1[0])
-        self.yint = None if self.slope is None else p1[1] - (self.slope * p1[0])
+
+        slope = None if p1[0] == p2[0] else (p2[1] - p1[1]) / (p2[0] - p1[0])
+        if slope is None:
+            self.slope_yint = None
+        else:
+            self.slope_yint = (slope, p1[1] - slope * p1[0])
 
     def contains_point(self, pt: Vec2fAble) -> CollideResult:
         pt = vec2f(*pt)
-        if self.slope is None or self.yint is None:
+        if self.slope_yint is None:
             return CollideResult.for_sure(
                 pt[0] == self.p1[0]
                 and pt[1] >= min(self.p1[1], self.p2[1]) - EPSILON
@@ -79,7 +83,7 @@ class LineHitbox(Hitbox):
             ):
                 return CollideResult.NO
 
-            correct_y = self.slope * pt[0] + self.yint
+            correct_y = self.slope_yint[0] * pt[0] + self.slope_yint[1]
 
             # Slopes are off
             return CollideResult.for_sure(abs(correct_y - pt[1]) < EPSILON)
@@ -91,39 +95,50 @@ class LineHitbox(Hitbox):
         )
 
     def collides_with_line(self, other: LineHitbox) -> CollideResult:
-        if self.slope == other.slope:
-            # TODO organize slope/yint type
-            if self.slope is None or self.yint is None or other.yint is None:
-                return CollideResult.for_sure(
-                    abs(self.p1[0] - other.p1[0]) < EPSILON
-                    and not (
-                        min(other.p1[1], other.p2[1]) - EPSILON
-                        > max(self.p1[1], self.p2[1]) + EPSILON
-                        or max(other.p1[1], other.p2[1]) + EPSILON
-                        < min(self.p1[1], self.p2[1]) - EPSILON
-                    )
+        if self.slope_yint is None and other.slope_yint is None:
+            return CollideResult.for_sure(
+                abs(self.p1[0] - other.p1[0]) < EPSILON
+                and not (
+                    min(other.p1[1], other.p2[1]) - EPSILON
+                    > max(self.p1[1], self.p2[1]) + EPSILON
+                    or max(other.p1[1], other.p2[1]) + EPSILON
+                    < min(self.p1[1], self.p2[1]) - EPSILON
                 )
-            else:
-                return CollideResult.for_sure(
-                    abs(self.yint - other.yint) < EPSILON
-                    and not (
-                        min(other.p1[0], other.p2[0]) - EPSILON
-                        > max(self.p1[0], self.p2[0]) + EPSILON
-                        or max(other.p1[0], other.p2[0]) + EPSILON
-                        < min(self.p1[0], self.p2[0]) - EPSILON
-                    )
+            )
+        elif self.slope_yint is None and other.slope_yint is not None:
+            x_collide = self.p1[0]
+            y_collide = other.slope_yint[0] * x_collide + other.slope_yint[1]
+            return CollideResult.for_sure(
+                self.contains_point((x_collide, y_collide)) == CollideResult.YES
+                and other.contains_point((x_collide, y_collide)) == CollideResult.YES
+            )
+        elif self.slope_yint is not None and other.slope_yint is None:
+            x_collide = other.p1[0]
+            y_collide = self.slope_yint[0] * x_collide + self.slope_yint[1]
+            return CollideResult.for_sure(
+                self.contains_point((x_collide, y_collide)) == CollideResult.YES
+                and other.contains_point((x_collide, y_collide)) == CollideResult.YES
+            )
+
+        # TODO write this in a more type-safe way that makes mypy not stupid
+        assert self.slope_yint is not None
+        assert other.slope_yint is not None
+
+        if self.slope_yint[0] == other.slope_yint[0]:
+            return CollideResult.for_sure(
+                abs(self.slope_yint[1] - other.slope_yint[1]) < EPSILON
+                and not (
+                    min(other.p1[0], other.p2[0]) - EPSILON
+                    > max(self.p1[0], self.p2[0]) + EPSILON
+                    or max(other.p1[0], other.p2[0]) + EPSILON
+                    < min(self.p1[0], self.p2[0]) - EPSILON
                 )
+            )
         else:
-            # ors technically only there for type safety
-            if self.slope is None:
-                x_collide = self.p1[0]
-                y_collide = other.slope * x_collide + other.yint
-            elif other.slope is None:
-                x_collide = other.p1[0]
-                y_collide = self.slope * x_collide + self.yint
-            else:
-                x_collide = (other.yint - self.yint) / (self.slope - other.slope)
-                y_collide = self.slope * x_collide + self.yint
+            x_collide = (other.slope_yint[1] - self.slope_yint[1]) / (
+                self.slope_yint[0] - other.slope_yint[0]
+            )
+            y_collide = self.slope_yint[0] * x_collide + self.slope_yint[1]
 
             return CollideResult.for_sure(
                 self.contains_point((x_collide, y_collide)) == CollideResult.YES

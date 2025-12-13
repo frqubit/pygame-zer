@@ -39,9 +39,22 @@ class DriverDrawer:
     def __init__(self, camera: Camera) -> None: ...
     def __call__(self) -> None: ...
     def circle(
-        self, color: Color, center: Vec2fAble, radius: FAble, width: FAble
+        self,
+        color: Color,
+        center: Vec2fAble,
+        radius: FAble,
+        width: Optional[FAble] = ...,
     ) -> None: ...
-    def rect(self, color: Color, rect: RectfAble, width: FAble) -> None: ...
+    def rect(
+        self,
+        color: Color,
+        rect: RectfAble,
+        width: Optional[FAble] = ...,
+    ) -> None: ...
     def line(
-        self, color: Color, start_pos: Vec2fAble, end_pos: Vec2fAble, width: FAble
+        self,
+        color: Color,
+        start_pos: Vec2fAble,
+        end_pos: Vec2fAble,
+        width: Optional[FAble] = ...,
     ) -> None: ...

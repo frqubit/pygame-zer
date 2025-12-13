@@ -11,7 +11,7 @@ class Circle(Shape):
     center: Vec2f
     driver: Driver
     fill: Color
-    outline: FAble | None
+    outline: Color | None
     outlineWidth: F
     radius: F
 
@@ -22,7 +22,7 @@ class Circle(Shape):
         radius: FAble,
         fill: Optional[Color] = ...,
         outlineWidth: Optional[FAble] = ...,
-        outline: Optional[FAble | None] = ...,
+        outline: Optional[Color | None] = ...,
     ) -> None: ...
     @property
     def hitbox(self) -> CircleHitbox: ...

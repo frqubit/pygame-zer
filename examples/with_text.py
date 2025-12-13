@@ -1,10 +1,11 @@
 import pygame
 import pygame.freetype
+
 import pygame_zer
 
 pygame.init()
 screen = pygame.display.set_mode((1280, 720))
-zerdriver = pygame_zer.PygameDriver(screen, flags=pygame_zer.F_DEFAULT | pygame_zer.F_NOCACHE)
+zerdriver = pygame_zer.PygameDriver(screen, flags=pygame_zer.DriverFlags.NOCACHE)
 
 font = pygame.freetype.SysFont("Arial", 20)
 
