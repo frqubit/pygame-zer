@@ -2,9 +2,11 @@ import enum
 
 import pygame
 
+from pygame_zer.hitbox import CollideResult
+
 from .camera import Camera
 from .shape import Shape
-from .types import Color, F, FAble, Rectf, RectfAble, Vec2f, Vec2fAble, f
+from .types import Color, FAble, RectfAble, Vec2fAble, f
 
 
 class DriverFlags(enum.Flag):
@@ -173,7 +175,8 @@ class DriverDrawer:
 
     def __call__(self):
         for shape in self.shapes:
-            shape.draw(self.camera)
+            if self.camera.hitbox.collides_hitbox(shape.hitbox) != CollideResult.NO:
+                shape.draw(self.camera)
 
     def circle(self, color: Color, center: Vec2fAble, radius: FAble, width: FAble = 0):
         """Draw a circle immediately"""
