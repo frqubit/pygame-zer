@@ -1,12 +1,17 @@
+import pygame
+import pygame.freetype
 import pytest
-import pygame, pygame.freetype
+
 import pygame_zer
+
 from .common import surface_equals_snapshot
+
 
 def init_driver() -> pygame_zer.PygameDriver:
     pygame.init()
     screen = pygame.Surface((500, 500))
     return pygame_zer.PygameDriver(screen)
+
 
 def test_shape_implemented():
     driver = init_driver()
@@ -17,6 +22,7 @@ def test_shape_implemented():
     except TypeError:
         pytest.fail()
 
+
 def test_fill_draws():
     driver = init_driver()
     font = pygame.freetype.SysFont("Arial", 50)
@@ -26,6 +32,7 @@ def test_fill_draws():
     driver.draw()
 
     assert surface_equals_snapshot(driver.camera.surface, "text/test_fill_draws_0")
+
 
 def test_translates():
     driver = init_driver()

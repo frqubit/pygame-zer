@@ -75,17 +75,18 @@ class Circle(Shape):
 
 
 class CircleHitbox(Hitbox):
-    def __init__(self, center: Vec2f, radius: F):
+    def __init__(self, center: Vec2fAble, radius: FAble):
         super().__init__(
             "circle",
             {"circle": self.collides_with_circle},
             {"circle": self.contains_circle, "rect": self.contains_rect},
         )
 
-        self.center = center
-        self.radius = radius
+        self.center = vec2f(*center)
+        self.radius = f(radius)
 
-    def contains_point(self, pt: Vec2f) -> CollideResult:
+    def contains_point(self, pt: Vec2fAble) -> CollideResult:
+        pt = vec2f(*pt)
         distance = Decimal.sqrt(
             (self.center[0] - pt[0]) ** f(2) + (self.center[1] - pt[1]) ** f(2)
         )

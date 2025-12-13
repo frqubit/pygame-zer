@@ -4,7 +4,7 @@ import pygame
 
 from .camera import Camera
 from .shape import Shape
-from .types import Color, F, FAble, Rectf, RectfAble, Vec2f, Vec2fAble
+from .types import Color, F, FAble, Rectf, RectfAble, Vec2f, Vec2fAble, f
 
 
 class DriverFlags(enum.Flag):
@@ -32,9 +32,9 @@ class DriverFlags(enum.Flag):
     """
 
     _NONE = 0
-    ZOOMABLE = enum.auto()
-    EXPLORABLE = enum.auto()
-    NOCACHE = enum.auto()
+    ZOOMABLE = 1
+    EXPLORABLE = 2
+    NOCACHE = 4
 
     @staticmethod
     def empty():
@@ -84,7 +84,7 @@ class Driver:
         self.camera = Camera(surface, (0, 0), surface.get_size(), 1)
         self._drawer = DriverDrawer(self.camera)
         self.flags = flags
-        self.zoom_sensitivity = 1.1
+        self.zoom_sensitivity = f(1.1)
 
     @property
     def draw(self):

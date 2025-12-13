@@ -53,16 +53,19 @@ class Line(Shape):
 
 
 class LineHitbox(Hitbox):
-    def __init__(self, p1: Vec2f, p2: Vec2f):
+    def __init__(self, p1: Vec2fAble, p2: Vec2fAble):
         super().__init__(
             "line", {"line": self.collides_with_line}, {"line": self.contains_line}
         )
+        p1 = vec2f(*p1)
+        p2 = vec2f(*p2)
         self.p1 = p1
         self.p2 = p2
         self.slope = None if p1[0] == p2[0] else (p2[1] - p1[1]) / (p2[0] - p1[0])
         self.yint = None if self.slope is None else p1[1] - (self.slope * p1[0])
 
-    def contains_point(self, pt: Vec2f) -> CollideResult:
+    def contains_point(self, pt: Vec2fAble) -> CollideResult:
+        pt = vec2f(*pt)
         if self.slope is None or self.yint is None:
             return CollideResult.for_sure(
                 pt[0] == self.p1[0]

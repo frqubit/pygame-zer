@@ -5,7 +5,7 @@ from collections.abc import Callable
 from enum import Enum
 from typing import Type, TypeAlias, TypeVar
 
-from pygame_zer.types import Vec2f
+from pygame_zer.types import Vec2f, Vec2fAble
 
 
 class CollideResult(Enum):
@@ -46,7 +46,7 @@ class Hitbox:
         return NoHitbox("", {}, {})
 
     @abstractmethod
-    def contains_point(self, pt: Vec2f) -> CollideResult:
+    def contains_point(self, pt: Vec2fAble) -> CollideResult:
         raise NotImplementedError("Hitbox is an abstract class")
 
     def collides_hitbox(self, hitbox: Hitbox) -> CollideResult:

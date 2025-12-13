@@ -11,7 +11,7 @@ if TYPE_CHECKING:
     from .camera import Camera
     from .driver import Driver
 from .shape import Shape
-from .types import Color, FAble, Rectf, RectfAble, Vec2f, f, rectf
+from .types import Color, FAble, Rectf, RectfAble, Vec2f, Vec2fAble, f, rectf
 
 
 class Rect(Shape):
@@ -74,7 +74,7 @@ class Rect(Shape):
 
 
 class RectHitbox(Hitbox):
-    def __init__(self, rect: Rectf):
+    def __init__(self, rect: RectfAble):
         super().__init__(
             "rect",
             {
@@ -88,9 +88,9 @@ class RectHitbox(Hitbox):
                 "line": self.contains_line,
             },
         )
-        self.rect = rect
+        self.rect = rectf(*rect)
 
-    def contains_point(self, pt: Vec2f) -> CollideResult:
+    def contains_point(self, pt: Vec2fAble) -> CollideResult:
         return CollideResult.for_sure(
             pt[0] >= self.rect[0]
             and pt[1] >= self.rect[1]
