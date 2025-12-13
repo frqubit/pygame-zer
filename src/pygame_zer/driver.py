@@ -136,7 +136,11 @@ class Driver:
         ):
             self.camera.translate((-event.rel[0], -event.rel[1]))
             return True
-        elif DriverFlags.ZOOMABLE in self.flags and event.type == pygame.MOUSEWHEEL:
+        elif (
+            DriverFlags.ZOOMABLE in self.flags
+            and event.type == pygame.MOUSEWHEEL
+            and event.y != 0
+        ):
             if DriverFlags.EXPLORABLE in self.flags:
                 mouse_pos = pygame.mouse.get_pos()
                 self.camera.zoom_with_focus(event.y * self.zoom_sensitivity, mouse_pos)
