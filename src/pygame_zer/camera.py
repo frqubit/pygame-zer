@@ -98,6 +98,19 @@ class Camera:
             )
         )
 
+    @property
+    def camera_world_center(self):
+        return (
+            self.topleft[0] + self.distance_to_world(self.rendersize[0] / 2),
+            self.topleft[1] + self.distance_to_world(self.rendersize[1] / 2),
+        )
+
+    def set_camera_world_center(self, world: Vec2f):
+        self.topleft = (
+            world[0] - self.distance_to_world(self.rendersize[0] / 2),
+            world[1] - self.distance_to_world(self.rendersize[1] / 2),
+        )
+
     def zoom_with_focus(self, rel: FAble, focus: Vec2i):
         """Zooms in or out while focusing on a point
 
