@@ -1,11 +1,13 @@
 from abc import abstractmethod
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Callable, TypeAlias
 
 from pygame_zer.hitbox import Hitbox
 from pygame_zer.types import FAble
 
 if TYPE_CHECKING:
     from .camera import Camera
+
+OnClickHandler: TypeAlias = Callable[[], None]
 
 
 class Shape:
@@ -24,6 +26,8 @@ class Shape:
     translate(x,y)
         Moves the shape the specified distance in world space.
     """
+
+    onclick: None | OnClickHandler = None
 
     @property
     @abstractmethod

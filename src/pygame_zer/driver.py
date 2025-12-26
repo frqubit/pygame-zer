@@ -6,7 +6,7 @@ from pygame_zer.hitbox import CollideResult
 
 from .camera import Camera
 from .shape import Shape
-from .types import Color, FAble, RectfAble, Vec2fAble, f
+from .types import Color, FAble, RectfAble, Vec2fAble, f, vec2f
 
 
 class DriverFlags(enum.Flag):
@@ -149,6 +149,13 @@ class Driver:
             else:
                 self.camera.zoom(event.y * self.zoom_sensitivity)
             return True
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            mouse_world_pos = self.camera.point_to_world(event.pos)
+            for shape in self._drawer.shapes:
+                if shape.onclick is not None and shape.hitbox.contains_point(
+                    mouse_world_pos
+                ):
+                    shape.onclick()
         return False
 
 
