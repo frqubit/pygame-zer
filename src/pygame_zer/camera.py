@@ -160,10 +160,7 @@ class Camera:
             out and 1 zooms in. All other
             values are unintended behavior.
         """
-        center: Vec2f = vec2f(
-            self.topleft[0] + ((self.rendersize[0] / self.camerazoom) / 2),
-            self.topleft[1] + ((self.rendersize[1] / self.camerazoom) / 2),
-        )
+        center: Vec2f = self.camera_world_center
 
         rel = f(rel)
 

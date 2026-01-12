@@ -3,6 +3,7 @@ import sys
 import pygame
 
 import pygame_zer
+from pygame_zer.types import vec2f
 
 arg1 = sys.argv[1] if len(sys.argv) > 1 else ["", ""]
 flags = pygame_zer.DriverFlags.empty()
@@ -14,6 +15,7 @@ if "e" in arg1:
 pygame.init()
 screen = pygame.display.set_mode((1280, 720))
 zerdriver = pygame_zer.PygameDriver(screen, flags=flags)
+zerdriver.camera.set_camera_world_center(vec2f(200, 200))
 
 # https://commons.wikimedia.org/wiki/File:Anas_platyrhynchos_(mixed_pair)_(32428014687).jpg
 image = pygame.image.load("examples/ducks.jpg")
